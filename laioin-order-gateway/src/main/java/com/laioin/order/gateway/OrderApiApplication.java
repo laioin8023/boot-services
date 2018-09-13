@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,17 +19,23 @@ import java.util.Arrays;
  * @ComponentScan("com.laioin.boot")
  * 解决多模块，自动注入不成功
  * 多个模块，共有包：com.laioin.boot
+ * extends SpringBootServletInitializer 解决tomcat 中无法使用的情况
  */
 @ComponentScan("com.laioin")
 @SpringBootApplication
-public class ApiApplication {
+public class OrderApiApplication extends SpringBootServletInitializer {
 
     @Autowired
     private Environment env;
-    private final Logger LGR = LoggerFactory.getLogger(ApiApplication.class);
+    private final Logger LGR = LoggerFactory.getLogger(OrderApiApplication.class);
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(OrderApiApplication.class);
+    }
 
     public static void main(String[] args) {
-        SpringApplication.run(ApiApplication.class, args);
+        SpringApplication.run(OrderApiApplication.class, args);
     }
 
     @Bean
